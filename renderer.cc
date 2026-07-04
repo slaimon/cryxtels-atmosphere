@@ -40,8 +40,7 @@ class Renderer {
 
     SDL_Surface* atmosphere = nullptr;
     SDL_Surface* atmosphere_scaled = nullptr;
-    double atm_scale_x;
-    double atm_scale_y;
+    double atm_scale_x, atm_scale_y;
     
     u8* video_buffer;
 
@@ -93,8 +92,8 @@ class Renderer {
 
     // draw the atmosphere surface onto the video buffer
     void draw_surface(u16 alpha, u16 beta) {
-        u32 a1 = (((360 - beta) * 32) / 36) * 4 * atm_scale_x;
-        u32 a2 = 3 * width * (alpha % 360) * atm_scale_y;
+        u32 a1 = atm_scale_x * (static_cast<double>((360 - beta) * 32) / 36) * 4;
+        u32 a2 = atm_scale_y * 3 * width * (alpha % 360);
         u32 dx = a1 % width + a2;
 
         SDL_LockSurface(atmosphere_scaled);
