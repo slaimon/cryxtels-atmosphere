@@ -13,10 +13,9 @@ static u32 ticks_per_frame = 1000.0 / framerate;
 
 u8 palette[256 * 4]; // RGBU format
 
-static const char* texture_filename = "NEBULA.ATM";
 u8 texture[409920];
 
-void load_texture(void) {
+void load_texture(char* texture_filename) {
     FILE* file = std::fopen(texture_filename, "rb");
     std::fseek(file, 0, SEEK_END);
     u32 size = std::ftell(file);
@@ -215,9 +214,14 @@ bool main_loop(void) {
     return poll_events(&player);
 }
 
-int main (void) {
+int main (int argc, char** argv) {
+    if (argc != 2) {
+        std::cout << "Name of atmosphere texture expected" << std::endl;
+        return -1;
+    }
+
     init_sdl();
-    load_texture();
+    load_texture(argv[1]);
     tinte(0);
 
     renderer.init();
