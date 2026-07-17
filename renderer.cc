@@ -1,3 +1,4 @@
+#include <string>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_pixels.h>
@@ -24,6 +25,10 @@ SDL_Palette* convert_palette_to_SDL(u8* palette) {
     }
     SDL_SetPaletteColors(sdl_palette, colors, 0, 256);
     return sdl_palette;
+}
+
+inline std::string window_name(std::string name, u32 width, u32 height) {
+    return name + " (" + std::to_string(width) + "x" + std::to_string(height) + ")";
 }
 
 class Renderer {
@@ -62,7 +67,7 @@ class Renderer {
     public:
 
     /// Create a Renderer object with the given resolution and pixel scaling.
-    Renderer(const char* window_text, u16 width_, u16 height_, double scale_x = 1.0, double scale_y = 1.0) {
+    Renderer(std::string name, u16 width_, u16 height_, double scale_x = 1.0, double scale_y = 1.0) {
         width = width_;
         height = height_;
         window_width = scale_x * width;
@@ -83,7 +88,7 @@ class Renderer {
         if (surface_32 == nullptr) throw sdl_exception();
 
         window = SDL_CreateWindow(
-            window_text,
+            window_name(name, width_, height_).c_str(),
             window_width,
             window_height,
             SDL_WINDOW_RESIZABLE

@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_keycode.h>
+#include <string>
 
 #include "types.h"
 #include "renderer.cc"
@@ -219,8 +220,8 @@ int main (int argc, char** argv) {
     load_texture(filename);
     tinte(0);
 
-    renderer_small = new Renderer((filename + " (320x200)").c_str(), 320, 200, 2.0, 2.0);
-    renderer_large = new Renderer((filename + " (640x400)").c_str(), 640, 400);
+    renderer_small = new Renderer(filename, 320, 200, 2.0, 2.0);
+    renderer_large = new Renderer(filename, 640, 400);
 
     renderer_small->init_atmosphere(texture, palette);
     renderer_large->init_atmosphere(texture, palette);
