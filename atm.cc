@@ -44,13 +44,6 @@ class Player {
     i16 v_beta;
 
     Player(void) : alpha(0), beta(0), v_alpha(0), v_beta(0) {}
-    
-    void set_v_alpha(i16 x) {
-        v_alpha = x;
-    }
-    void set_v_beta(i16 x) {
-        v_beta = x;
-    }
 
     void update(void) {
         alpha = angle_sum(alpha, v_alpha);
@@ -109,7 +102,7 @@ void tavola_colori (const u8 *nuova_tavolozza,
     }
 }
 
-// we only need to call tinte(0)
+// we only need to call tinte(0),
 // any higher parameter value is only used close to Sunny
 void tinte (unsigned char satu)
 {
@@ -158,11 +151,11 @@ bool poll_events(Player* p) {
                             break;
                         case SDLK_UP:
                         case SDLK_DOWN:
-                            p->set_v_alpha(0);
+                            p->v_alpha = 0;
                             break;
                         case SDLK_RIGHT:
                         case SDLK_LEFT:
-                            p->set_v_beta(0);
+                            p->v_beta = 0;
                             break;
                         default:
                             break;
@@ -174,16 +167,16 @@ bool poll_events(Player* p) {
                     int key = sdlevent.key.key;
                     switch (key) {
                         case SDLK_UP:
-                            p->set_v_alpha(-1);
+                            p->v_alpha = -1;
                             break;
                         case SDLK_DOWN:
-                            p->set_v_alpha(1);
+                            p->v_alpha = 1;
                             break;
                         case SDLK_RIGHT:
-                            p->set_v_beta(-1);
+                            p->v_beta = -1;
                             break;
                         case SDLK_LEFT:
-                            p->set_v_beta(1);
+                            p->v_beta = 1;
                             break;
                         default:
                             break;
@@ -195,12 +188,12 @@ bool poll_events(Player* p) {
     return quit;
 }
 
-Renderer renderer(320, 200, 2.0, 2.0);
+Renderer renderer_small(320, 200, 2.0, 2.0);
 Renderer renderer_large(640, 400);
 Player player;
 
 inline void draw(Renderer renderer) {
-    renderer.draw_surface(player.alpha, player.beta);
+    renderer.draw_atmosphere(player.alpha, player.beta);
     renderer.render(palette);
     renderer.pclear(0);
 }
@@ -208,7 +201,7 @@ inline void draw(Renderer renderer) {
 bool main_loop(void) {
     player.update();
 
-    draw(renderer);
+    draw(renderer_small);
     draw(renderer_large);
 
     return poll_events(&player);
@@ -216,7 +209,7 @@ bool main_loop(void) {
 
 int main (int argc, char** argv) {
     if (argc != 2) {
-        std::cout << "Name of atmosphere texture expected" << std::endl;
+        std::cout << "Command line argument expected: please give the path to an atmosphere file, e.g. \"NEBULA.ATM\"" << std::endl;
         return -1;
     }
 
@@ -224,10 +217,8 @@ int main (int argc, char** argv) {
     load_texture(argv[1]);
     tinte(0);
 
-    renderer.init();
-    renderer.init_texture_to_surface(texture, palette);
-    renderer_large.init();
-    renderer_large.init_texture_to_surface(texture, palette);
+    renderer_small.init_atmosphere(texture, palette);
+    renderer_large.init_atmosphere(texture, palette);
 
     bool quit = false;
 	while (!quit) {
