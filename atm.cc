@@ -188,14 +188,14 @@ bool poll_events(Player* p) {
     return quit;
 }
 
-Renderer renderer_small(320, 200, 2.0, 2.0);
-Renderer renderer_large(640, 400);
+Renderer* renderer_small;
+Renderer* renderer_large;
 Player player;
 
-inline void draw(Renderer renderer) {
-    renderer.draw_atmosphere(player.alpha, player.beta);
-    renderer.render(palette);
-    renderer.pclear(0);
+inline void draw(Renderer* renderer) {
+    renderer->draw_atmosphere(player.alpha, player.beta);
+    renderer->render(palette);
+    renderer->pclear(0);
 }
 
 bool main_loop(void) {
@@ -213,12 +213,17 @@ int main (int argc, char** argv) {
         return -1;
     }
 
+    char* filename = argv[1];
+
     init_sdl();
-    load_texture(argv[1]);
+    load_texture(filename);
     tinte(0);
 
-    renderer_small.init_atmosphere(texture, palette);
-    renderer_large.init_atmosphere(texture, palette);
+    renderer_small = new Renderer(filename, 320, 200, 2.0, 2.0);
+    renderer_large = new Renderer(filename, 640, 400);
+
+    renderer_small->init_atmosphere(texture, palette);
+    renderer_large->init_atmosphere(texture, palette);
 
     bool quit = false;
 	while (!quit) {

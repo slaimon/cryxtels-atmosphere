@@ -62,7 +62,7 @@ class Renderer {
     public:
 
     /// Create a Renderer object with the given resolution and pixel scaling.
-    Renderer(u16 width_, u16 height_, double scale_x = 1.0, double scale_y = 1.0) {
+    Renderer(char* window_text, u16 width_, u16 height_, double scale_x = 1.0, double scale_y = 1.0) {
         width = width_;
         height = height_;
         window_width = scale_x * width;
@@ -75,17 +75,29 @@ class Renderer {
         video_buffer = new u8[framebuffer_size];
         memset(&video_buffer[0], 0, framebuffer_size);
 
-        surface_32 = SDL_CreateSurface(width, height, SDL_PIXELFORMAT_RGBX32);
+        surface_32 = SDL_CreateSurface(
+            width,
+            height,
+            SDL_PIXELFORMAT_RGBX32
+        );
         if (surface_32 == nullptr) throw sdl_exception();
 
-        window = SDL_CreateWindow("Atmosphere texture test",
-                window_width, window_height, SDL_WINDOW_RESIZABLE);
+        window = SDL_CreateWindow(
+            window_text,
+            window_width,
+            window_height,
+            SDL_WINDOW_RESIZABLE
+        );
         if (window == nullptr) throw sdl_exception();
 
         renderer = SDL_CreateRenderer(window, nullptr);
-
-        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBX32,
-                                    SDL_TEXTUREACCESS_STREAMING, width,height);
+        texture = SDL_CreateTexture(
+            renderer,
+            SDL_PIXELFORMAT_RGBX32,
+            SDL_TEXTUREACCESS_STREAMING,
+            width,
+            height
+        );
 
         SDL_SetWindowMinimumSize(window, width, height);
     }
@@ -113,7 +125,7 @@ class Renderer {
             return;
 
         u32 start_idx = get_atmosphere_start(alpha, beta);
-        
+
         SDL_LockSurface(atmosphere_scaled);
         u8* pixels = static_cast<u8*>(atmosphere_scaled->pixels);
         memcpy(&video_buffer[0], &pixels[start_idx], width*height);
