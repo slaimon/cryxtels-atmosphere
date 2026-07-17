@@ -20,3 +20,5 @@ g++ atm.cc -o atm -lSDL3
 Make sure to give it the path to an `.ATM` file from Crystal Pixels, like `NEBULA.ATM`.
 
 The program will create two windows, one at low resolution (320x200, 2x pixel scaling) and one at double resolution (640x400, 1x pixel scaling). You can place them side by side and rotate the player by using the **arrow keys**. The two windows should display the same content at all times.
+
+Finally, press `esc` to quit.
