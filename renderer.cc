@@ -53,8 +53,8 @@ class Renderer {
 
     /// Compute the starting index for the atmosphere texture lookup
     u32 get_atmosphere_start(u16 alpha, u16 beta) {
-        u32 a1 = (((360 - beta) * 32) / 36) * 4;
-        u32 a2 = 3 * width * (alpha % 360);
+        u32 a1 = atm_scale_x * 4 * (((360 - beta) * 32) / 36.0);
+        u32 a2 = atm_scale_y * 3 * width * (alpha % 360);
         return a1 % width + a2;
     }
 
