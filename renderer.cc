@@ -62,7 +62,7 @@ class Renderer {
     public:
 
     /// Create a Renderer object with the given resolution and pixel scaling.
-    Renderer(char* window_text, u16 width_, u16 height_, double scale_x = 1.0, double scale_y = 1.0) {
+    Renderer(const char* window_text, u16 width_, u16 height_, double scale_x = 1.0, double scale_y = 1.0) {
         width = width_;
         height = height_;
         window_width = scale_x * width;

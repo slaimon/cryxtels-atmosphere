@@ -15,8 +15,8 @@ u8 palette[256 * 4]; // RGBU format
 
 u8 texture[409920];
 
-void load_texture(char* texture_filename) {
-    FILE* file = std::fopen(texture_filename, "rb");
+void load_texture(std::string texture_filename) {
+    FILE* file = std::fopen(texture_filename.c_str(), "rb");
     std::fseek(file, 0, SEEK_END);
     u32 size = std::ftell(file);
     std::fseek(file, 0, SEEK_SET);
@@ -213,14 +213,14 @@ int main (int argc, char** argv) {
         return -1;
     }
 
-    char* filename = argv[1];
+    std::string filename(argv[1]);
 
     init_sdl();
     load_texture(filename);
     tinte(0);
 
-    renderer_small = new Renderer(filename, 320, 200, 2.0, 2.0);
-    renderer_large = new Renderer(filename, 640, 400);
+    renderer_small = new Renderer((filename + " (320x200)").c_str(), 320, 200, 2.0, 2.0);
+    renderer_large = new Renderer((filename + " (640x400)").c_str(), 640, 400);
 
     renderer_small->init_atmosphere(texture, palette);
     renderer_large->init_atmosphere(texture, palette);
