@@ -1,4 +1,4 @@
-# Cryxtels Atmosphere Tester
+# Cryxtels Atmosphere Viewer
 
 This program is a minimal reproduction of the Cryxtels rendering environment.
 
